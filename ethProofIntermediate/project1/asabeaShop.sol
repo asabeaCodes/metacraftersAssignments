@@ -11,15 +11,22 @@ contract asabeaShop {
     }
     
     function buyBag() payable public {
+
+        // require
+
         require(msg.value >= 2 ether, "The bag costs more than the amount you paid");
         users[msg.sender].bags +=1;
     }
 
     function buyShoe() payable public {
-        if (msg.value <= 4 ether) {
+
+        // revert
+
+        if (msg.value < 4 ether) {
             revert("you can't get a shoe this cheap");
+        } else {
+            users[msg.sender].shoes += 1;
         }
-        users[msg.sender].shoes += 1;
     }
 
     function checkPossessions() public view returns (possessions memory) {
@@ -34,9 +41,11 @@ contract asabeaShop {
     }
 
     function withdrawSales() public returns (bool sent) {
+
+        //assert 
+        
         assert(msg.sender == shopOwner);
         
         sent = shopOwner.send(address(this).balance);
     }
 }
-
