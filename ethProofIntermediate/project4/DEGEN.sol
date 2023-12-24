@@ -26,11 +26,11 @@ contract ERC20 is IERC20 {
     // Token details
 
     function name() public pure returns (string memory) {
-        return "JBmoney";
+        return "DEGEN";
     }
 
     function symbol() public pure returns (string memory) {
-        return "JBM";
+        return "DGN";
     }
 
     uint public decimals = 2;
@@ -72,8 +72,8 @@ contract ERC20 is IERC20 {
     // Transfer after authorization
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        require(allowances[_from][msg.sender] >= _value, " Agent has not been approved to transfer that amount of JBmoney");
-        require(balanceOf(_from) >= _value, "The JBmoney holder doesn't have enough funds");
+        require(allowances[_from][msg.sender] >= _value, " Agent has not been approved to transfer that amount of DEGEN tokens");
+        require(balanceOf(_from) >= _value, "The DEGEN holder doesn't have enough funds");
         balances[_from] -= _value;
         balances[_to] += _value;
         allowances[_from][msg.sender] -= _value;
@@ -86,19 +86,40 @@ contract ERC20 is IERC20 {
 
 
 
-contract JBmoney is ERC20 {
-
+contract DEGEN is ERC20 {
     function mint(address _receipient, uint256 _value) public onlyOwner() {
         balances[_receipient] += _value;
         totalSupply += _value;
         emit Transfer(address(0), _receipient, _value);
     }
-
     function burn(uint256 _value) public {
-        require(balanceOf(msg.sender) >= _value, "token holder doesn't have enough JBmoney");
+        require(balanceOf(msg.sender) >= _value, "token holder doesn't have enough DEGEN");
         totalSupply -= _value;
         balances[msg.sender] -= _value;
         emit Transfer(msg.sender, address(0), _value);
     }
-    
+
+
+    mapping (address => possessions) users;
+
+    struct possessions {
+        uint bags;
+        uint shoes;
+    }
+
+    function buyBag() public {
+        require(balanceOf(msg.sender) >= 200, "your sim can't afford a bag"); 
+        burn(200);
+        users[msg.sender].bags += 1;
+    }
+    function buyShoe() public {
+        require(balanceOf(msg.sender) >= 400, "your sim can't afford a shoe");
+        burn(400);
+        users[msg.sender].shoes += 1;
+    }
+
+    function checkPossessions() public view returns (possessions memory) {
+        return users[msg.sender];
+    }
+
 }
