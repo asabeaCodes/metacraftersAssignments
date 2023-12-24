@@ -18,9 +18,9 @@
 
  presently, DEGEN tokens are undergoing test phases on the avalanche-fuji testnet
 
- the verified DEGEN contract exists on the testnet at the following address `0x727c0349566aFd263D09f870Ec557e9Ec8e6d6F5`
+ the verified DEGEN contract exists on the testnet at the following address `0x37d5B23b2337A58A35B5c3112536521DeFc010F0`
 
- you can check out the contract on snowtrace here = `https://testnet.snowtrace.io/address/0x727c0349566aFd263D09f870Ec557e9Ec8e6d6F5#code-43113`
+ you can check out the contract on snowtrace here = `https://testnet.snowtrace.dev/address/0x37d5B23b2337A58A35B5c3112536521DeFc010F0#code-43113`
 
  ## MEET THE DEGEN TEAM
 
