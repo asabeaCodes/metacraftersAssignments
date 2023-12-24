@@ -1,21 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.1;
 
-interface IERC173 {
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+import "@openzeppelin/contracts/interfaces/IERC20.sol";
 
-    function owner() view external returns(address);
-
-    function transferOwnership(address _newOwner) external;
-}
-
-
-
-contract ERC20 is IERC173 {
-
-    // events
-    event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+contract ERC20 is IERC20 {
 
     // Contract Ownership
     address public owner;
@@ -31,7 +19,6 @@ contract ERC20 is IERC173 {
 
     function transferOwnership(address _newOwner) external onlyOwner() {
         owner = _newOwner;
-        emit OwnershipTransferred(msg.sender, _newOwner);
     }
 
 
@@ -70,26 +57,26 @@ contract ERC20 is IERC173 {
 
     // permission to transfer
 
-    mapping (address => mapping(address => uint)) private spendingCaps;
+    mapping (address => mapping(address => uint)) private allowances;
 
     function approve(address _spender, uint256 _value) public returns (bool success) {
-        spendingCaps[msg.sender][_spender] = _value;
+        allowances[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         success = true;
     }
 
     function allowance(address _owner, address _spender) public view returns (uint256 spendingCap) {
-        return spendingCaps[_owner][_spender];
+        return allowances[_owner][_spender];
     }
 
     // Transfer after authorization
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
-        require(spendingCaps[_from][msg.sender] >= _value, " Agent has not been approved to transfer that amount of JBmoney");
+        require(allowances[_from][msg.sender] >= _value, " Agent has not been approved to transfer that amount of JBmoney");
         require(balanceOf(_from) >= _value, "The JBmoney holder doesn't have enough funds");
         balances[_from] -= _value;
         balances[_to] += _value;
-        spendingCaps[_from][msg.sender] -= _value;
+        allowances[_from][msg.sender] -= _value;
         emit Transfer(_from, _to, _value);
         success = true;
     }
