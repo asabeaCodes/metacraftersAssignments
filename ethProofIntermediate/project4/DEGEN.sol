@@ -33,7 +33,7 @@ contract ERC20 is IERC20 {
         return "DGN";
     }
 
-    uint public decimals = 2;
+    uint public decimals = 0;
     uint public totalSupply;
 
 
